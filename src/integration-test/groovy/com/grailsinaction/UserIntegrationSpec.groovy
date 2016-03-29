@@ -37,4 +37,18 @@ class UserIntegrationSpec extends Specification {
       then: "The change is reflected in the database"
       User.get(existingUser.id).password == "sesame"
     }
+
+    def "Deleting an existing user removes it from the database"() {
+      given: "An existing user"
+      def existingUser = new User(loginId: "joe", password: "secret",
+        homepage: "http://www.grailsinaction.com")
+      existingUser.save(failOnError: true)
+
+      when: "The user is deleted"
+      def foundUser = User.get(existingUser.id)
+      foundUser.delete(flush: true)
+
+      then: "The user is removed from the database"
+      !User.exists(foundUser.id)
+    }
 }
