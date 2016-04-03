@@ -40,7 +40,6 @@ class PostIntegrationSpec extends Specification {
 
     then: "The posts appear on the retrieved user"
     sortedPostContent == [ "First", "Second", "Third" ]
-
   }
 
 }
