@@ -13,6 +13,8 @@ class User {
     password size: 6..8, blank: false, validator: {
       passwd, user -> passwd != user.loginId
     }
+    tags()
+    posts()
     profile nullable: true
   }
 }

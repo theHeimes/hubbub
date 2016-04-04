@@ -11,6 +11,9 @@ class Profile {
   String country
   String jabberAddress
 
+  String toString(){ return "Profile of $fullName (id: $id)" }  
+  String getDisplayString() { return fullName }
+
   static constraints = {
     fullName blank: false
     bio nullable: true, maxSize: 1000

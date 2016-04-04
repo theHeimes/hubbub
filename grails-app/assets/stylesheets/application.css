@@ -9,6 +9,7 @@
 *
 *= require bootstrap
 *= require grails
+*= require hubbub
 *= require main
 *= require mobile
 *= require_self
