@@ -91,4 +91,21 @@ class UserIntegrationSpec extends Specification {
       "validator.invalid" == moron.errors.getFieldErrors("password").code[0]
       "whoami" == moron.errors.getFieldErrors("password").rejectedValue[0]
     }
+
+    def "Ensure a user can follow other users"() {
+
+      given: "A set of baseline users"
+      def joe = new User(loginId: "joe", password: "secret").save()
+      def jane = new User(loginId: "jane", password: "secret").save()
+      def jill = new User(loginId: "jill", password: "secret").save()
+
+      when: "Joe follows Jane & Jill, and Jill follows Jane"
+      joe.addToFollowing(jane)
+      joe.addToFollowing(jill)
+      jill.addToFollowing(jane)
+
+      then: "Follower counts should match following people"
+      2 == joe.following.size()
+      1 == jill.following.size()
+    }
 }

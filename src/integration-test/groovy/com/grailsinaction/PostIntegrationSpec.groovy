@@ -42,4 +42,29 @@ class PostIntegrationSpec extends Specification {
     sortedPostContent == [ "First", "Second", "Third" ]
   }
 
+  def "Exercise tagging several post with various tags"() {
+    given: "A user with a set of tags"
+    def user = new User(loginId: "joe", password: "secret")
+    def tagGroovy = new Tag(name: "groovy")
+    def tagGrails = new Tag(name: "grails")
+    user.addToTags(tagGroovy)
+    user.addToTags(tagGrails)
+    user.save(failOnError: true)
+
+    when: "The user tag two fresh posts"
+    def groovyPost = new Post(content: "A groovy post")
+    user.addToPosts(groovyPost)
+    groovyPost.addToTags(tagGroovy)
+
+    def bothPost = new Post(content: "A goovy and grails post")
+    user.addToPosts(bothPost)
+    bothPost.addToTags(tagGroovy)
+    bothPost.addToTags(tagGrails)
+
+    then:
+    user.tags*.name.sort() == ['grails', 'groovy']
+    1 == groovyPost.tags.size()
+    2 == bothPost.tags.size()
+  }
+
 }
