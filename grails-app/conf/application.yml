@@ -11,7 +11,8 @@ dataSource:
     jmxExport: true
 #    driverClassName: org.h2.Driver
     driverClassName: com.mysql.jdbc.Driver
-    dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    dialect: org.hibernate.dialect.MySQL5InnoDBDialect # remove for h2
+#    username: sa
     username: root
     password:
 
