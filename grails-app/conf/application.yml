@@ -5,6 +5,8 @@ hibernate:
         use_second_level_cache: true
         use_query_cache: false
         region.factory_class: 'org.hibernate.cache.ehcache.EhCacheRegionFactory'
+        format_sql: true
+        use_sql_comments: true
 
 dataSource:
     pooled: true
@@ -15,6 +17,7 @@ dataSource:
 #    username: sa
     username: root
     password:
+    logSql: false
 
 environments:
     development:

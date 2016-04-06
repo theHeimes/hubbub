@@ -8,7 +8,19 @@ appender('STDOUT', ConsoleAppender) {
     }
 }
 
+appender("FILE", FileAppender) {
+  file = "testFile.log"
+  append = true
+  encoder(PatternLayoutEncoder) {
+    pattern = "%level %logger - %msg%n"
+  }
+}
+
+logger("org.hibernate.SQL", DEBUG)
+logger("org.hibernate.type.descriptor.sql.BasicBinder", DEBUG)
+
 root(ERROR, ['STDOUT'])
+root(DEBUG, ['FILE'])
 
 def targetDir = BuildSettings.TARGET_DIR
 if (Environment.isDevelopmentMode() && targetDir) {
