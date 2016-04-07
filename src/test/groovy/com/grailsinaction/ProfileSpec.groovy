@@ -9,14 +9,4 @@ import spock.lang.Specification
 @TestFor(Profile)
 class ProfileSpec extends Specification {
 
-    def setup() {
-    }
-
-    def cleanup() {
-    }
-
-    void "test something"() {
-        expect:"fix me"
-            true == false
-    }
 }

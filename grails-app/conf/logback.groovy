@@ -16,8 +16,8 @@ appender("FILE", FileAppender) {
   }
 }
 
-logger("org.hibernate.SQL", DEBUG)
-logger("org.hibernate.type.descriptor.sql.BasicBinder", DEBUG)
+//logger("org.hibernate.SQL", DEBUG)
+//logger("org.hibernate.type.descriptor.sql.BasicBinder", DEBUG)
 
 root(ERROR, ['STDOUT'])
 root(DEBUG, ['FILE'])
