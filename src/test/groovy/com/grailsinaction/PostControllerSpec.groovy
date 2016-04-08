@@ -44,59 +44,72 @@ class PostControllerSpec extends Specification {
    }
 
    def "Adding a valid post to the timeline"() {
-    given: "A user with posts in the database"
-    User chuck = new User(loginId: "chuck_norris", password: "secret").save(failOnError: true)
+    given: "A mock post service"
+    def mockPostService = Mock(PostService)
+    1 * mockPostService.createPost(_, _) >> new Post(content: "Mock Post")
+    controller.postService = mockPostService
 
-    and: "A loginId parameter"
-    params.id = chuck.loginId
-
-    and: "some content for the post"
-    params.content = "Chuck Norris can unit test entire applications with a single assert"
-
-    when: "addPost is invoked"
-    def model = controller.addPost()
+    when: "controller is invoked"
+    def result = controller.addPost("joe_cool", "Posting up a storm")
 
     then: "our flash message and redirect confirms the success"
-    flash.message == "Successfully created Post"
-    response.redirectUrl == "/post/timeline/${chuck.loginId}"
-    Post.countByUser(chuck) == 1
+    flash.message ==~ /Added new post: Mock.*/
+    response.redirectUrl == "/post/timeline/joe_cool"
   }
-
   def "Adding an invalid post to the timeline"() {
     given: "A user with posts in the database"
     User chuck = new User(loginId: "chuck_norris", password: "secret").save(failOnError: true)
 
-    and: "A loginId parameter"
-    params.id = chuck.loginId
-
-    and: "some content for the post"
-    params.content = ""
+    and: "a post service that throws an exception with the given data"
+    def errorMsg = "Invalid or empty post"
+    def mockPostService = Mock(PostService)
+    1 * mockPostService.createPost(chuck.loginId, null) >> { throw new PostException(message: errorMsg) }
+    controller.postService = mockPostService
 
     when: "addPost is invoked"
-    def model = controller.addPost()
+    def model = controller.addPost(chuck.loginId, null)
 
     then: "our flash message and redirect confirms the success"
-    flash.message == "Invalid or empty post"
+    flash.message == errorMsg
     response.redirectUrl == "/post/timeline/${chuck.loginId}"
     Post.countByUser(chuck) == 0
   }
-
+/*
   def "Adding a post with invalid user to the timeline"() {
     given: "A user with posts in the database"
-    User chuck = new User(loginId: "chuck_norris", password: "secret").save(failOnError: true)
+    def mockPostService = Mock(PostService)
+    1 * mockPostService.createPost(_, _) >> new Post(content: "Mock Post")
+    controller.postService = mockPostService
 
     and: "A loginId parameter"
-    params.id = "this-user-id-does-not-exist"
+    def invalidLoginId = "this-user-id-does-not-exist"
 
     and: "some content for the post"
-    params.content = "Chuck Norris can unit test entire applications with a single assert"
+    def postContent = "Chuck Norris can unit test entire applications with a single assert"
 
     when: "addPost is invoked"
-    def model = controller.addPost()
+    def model = controller.addPost(invalidLoginId, postContent)
 
     then: "our flash message and redirect confirms the success"
+    thrown(PostException)
     flash.message == "Invalid User Id"
     response.redirectUrl == "/post/timeline/${params.id}"
     Post.countByUser(chuck) == 0
+  }
+*/
+  def "Testing id of #supplierId redirects to #expectedUrl"() {
+    given:
+    params.id = supplierId
+
+    when: "Controller is invoked"
+    controller.home()
+
+    then:
+    response.redirectUrl == expectedUrl
+
+    where:
+    supplierId    |   expectedUrl
+    "joe_cool"    |   "/post/timeline/joe_cool"
+    null          |   "/post/timeline/chuck_norris"
   }
 }
