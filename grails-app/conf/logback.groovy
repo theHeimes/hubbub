@@ -20,7 +20,7 @@ appender("FILE", FileAppender) {
 //logger("org.hibernate.type.descriptor.sql.BasicBinder", DEBUG)
 
 root(ERROR, ['STDOUT'])
-root(DEBUG, ['FILE'])
+//root(DEBUG, ['FILE'])
 
 def targetDir = BuildSettings.TARGET_DIR
 if (Environment.isDevelopmentMode() && targetDir) {
