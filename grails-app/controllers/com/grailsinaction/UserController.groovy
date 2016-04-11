@@ -31,8 +31,8 @@ class UserController {
 
   def register2(UserRegistrationCommand urc) {
     if (urc.hasErrors()) {
-      redirect(uri:"/urc-has-errors")
-//      render view: "register", model: [ user : urc ]
+//      redirect(uri:"/urc-has-errors")
+      render view: "register", model: [ user : urc ]
     } else {
       def user = new User(urc.properties)
       user.profile = new Profile(urc.properties)
@@ -41,9 +41,18 @@ class UserController {
         redirect(uri: "/")
       } else {
         // maybe not unique loginId?
-        redirect(uri:"/maybe-not-unique-loginId")
-//        return [ user : user ]
+//        redirect(uri:"/maybe-not-unique-loginId")
+        return [ user : user ]
       }
+    }
+  }
+
+  def profile(String id) {
+    def user = User.findByLoginId(id)
+    if (user) {
+      return [profile: user.profile]
+    } else {
+      response.sendError(404)
     }
   }
 }
