@@ -11,7 +11,7 @@ import spock.lang.*
  */
 @TestMixin(GrailsUnitTestMixin)
 @TestFor(PostController)
-@Mock([User,Post])
+@Mock([User,Post,LameSecurityInterceptor])
 class PostControllerSpec extends Specification {
 
     def "Get a users timeline given their id"() {
@@ -112,4 +112,13 @@ class PostControllerSpec extends Specification {
     "joe_cool"    |   "/post/timeline/joe_cool"
     null          |   "/post/timeline/chuck_norris"
   }
+/*
+  def "Exercising security interceptor for unauthenticated user"() {
+    when:
+    withInterceptors(action: "addPost"){
+      controller.addPost("glen_a_smith", "A first post")
+    }
+    then: response.redirectUrl == "/login/form"
+  }
+*/
 }

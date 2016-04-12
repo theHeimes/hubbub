@@ -20,6 +20,7 @@ appender("FILE", FileAppender) {
 //logger("org.hibernate.type.descriptor.sql.BasicBinder", DEBUG)
 
 root(ERROR, ['STDOUT'])
+logger("com.grailsinaction.LameSecurityInterceptor", DEBUG, ["STDOUT"], false)
 //root(DEBUG, ['FILE'])
 
 def targetDir = BuildSettings.TARGET_DIR
