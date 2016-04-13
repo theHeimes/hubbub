@@ -14,12 +14,22 @@ class PostController {
     redirect (action: "timeline", params: params)
   }
 
-  def timeline() {
-    def user = User.findByLoginId(params.id)
+  def timeline(String id) {
+    def user = User.findByLoginId(id)
     if (!user) {
       response.sendError(404)
     } else {
       [ user : user ]
+    }
+  }
+
+  def personal() {
+    def user = session.user
+    if (!user) {
+      redirect(controller: 'login', action: 'form')
+    } else {
+      //params.id = user.loginId
+      redirect (action: "timeline", id: user.loginId)
     }
   }
 
